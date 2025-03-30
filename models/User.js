@@ -1,18 +1,27 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const passportLocalMongoose = require('passport-local-mongoose');
 
-const UserSchema = new mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    email: { type: String, unique: true },
-    phoneNumber: String,
-    countryCode: String,
-    currency: String,
-    isAdult: Boolean,
-    termsAccepted: Boolean,
-    role: { type: String, enum: ['user', 'admin'], default: 'user' }
-});
 
+const UserSchema = new mongoose.Schema({
+  username:  { type: String, unique: true }, // Will be auto-generated
+  firstName: { type: String, required: true },
+  lastName:  { type: String, required: true },
+  email:       { type: String, required: true, unique: true },
+  password: { type: String, required: true }, // Should be stored as plain text if no bcrypt is use
+  role:        { type: String, enum: ["user", "admin", "finance"], default: "user" },
+  phone:       { type: String },
+  countryCode:     { type: String },
+  address:     { type: String },
+  birthdate:   { type: Date },
+  gender: {
+    type: String,
+    enum: ["Male", "Female", "Other", "Not Selected"],
+  },
+  bankAccount: { type: String }, // For finance admin to update user bank details
+  ipAdress:    { type: String }, // For finance admin to update user IP address
+  location:    { type: String }, // For finance admin to update user location
+});
 UserSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
 
-module.exports = mongoose.model('User', UserSchema);
+
+module.exports = mongoose.model("User", UserSchema);
