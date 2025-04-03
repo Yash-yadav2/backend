@@ -17,7 +17,7 @@ connectDB();
 
 // Middleware
 app.use(express.json());
-const allowedOrigins = [process.env.FRONTEND];
+const allowedOrigins = ["http://localhost:5173", "http://localhost:5175" , "http://localhost:5174"];
 
 app.use(
   cors({
