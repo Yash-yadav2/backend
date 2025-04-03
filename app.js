@@ -4,6 +4,9 @@ const passport = require("passport");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
+const path = require("path");
+
+
 
 
 // Load environment variables
@@ -14,6 +17,13 @@ const app = express();
 
 // Connect to MongoDB
 connectDB();
+
+// Serve static files from the React build directory
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "public", "index.html"));
+});
 
 // Middleware
 app.use(express.json());
