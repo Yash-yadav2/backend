@@ -8,7 +8,7 @@ const updateUserProfile = async (req, res) => {
     }
 
 
-    const allowedUpdates = ["firstName", "lastName", "phoneNumber", "country", "address", "birthdate", "gender", "location", "pep", "sex"];
+    const allowedUpdates = ["firstName", "lastName", "phone", "country", "address", "birthdate", "gender", "location"];
 
     const updates = {};
     allowedUpdates.forEach((field) => {

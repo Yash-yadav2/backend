@@ -20,7 +20,7 @@ const TransactionSchema = new mongoose.Schema({
   paymentMethod: { 
     type: String, 
   }, 
-  transactionId: { 
+  transactionUserId: { 
     type: String, 
   }, 
 
@@ -38,6 +38,7 @@ const TransactionSchema = new mongoose.Schema({
     type: String, 
   },
   ipAddress: { type: String },
+  rejectionNote:{ type: String },
   createdAt: { 
     type: Date, 
     default: Date.now 
