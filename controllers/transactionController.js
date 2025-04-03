@@ -6,9 +6,9 @@ const createTransaction = async (req, res) => {
     console.log("🔹 Incoming Transaction Data:", req.body);
 
     // Ensure user is authenticated
-    if (!req.user || !req.user._id) {
-      console.log("❌ Unauthorized Request - No User Found");
-      return res.status(401).json({ message: "Unauthorized. Please log in." });
+    if (!req.user) {
+      console.log("❌ Unauthorized Request - No User Found backend");
+      return res.status(401).json({ message: "Unauthorized. Please log in from bankend." });
     }
 
     // Extract transaction details from request body
@@ -41,7 +41,7 @@ const createTransaction = async (req, res) => {
 
     // Create new transaction
     const newTransaction = new Transaction({
-      user: req.user._id,
+      user: req.user,
       amount,
       paymentType,
       paymentMethod,
@@ -82,11 +82,7 @@ const getUserTransactions = async (req, res) => {
 // 🔴 **Get All Transactions (Admin/Finance)**
 const getAllTransactions = async (req, res) => {
   try {
-    if (req.user.role !== "admin" && req.user.role !== "finance") {
-      return res.status(403).json({ message: "Access denied" });
-    }
-
-    const transactions = await Transaction.find().populate("user", "firstName lastName email").sort({ createdAt: -1 });
+    const transactions = await Transaction.find().populate("user").sort({ createdAt: -1 });
     res.json(transactions);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch transactions", error: error.message });
@@ -96,9 +92,6 @@ const getAllTransactions = async (req, res) => {
 // 🟠 **Update Transaction Status (Finance Admin)**
 const updateTransactionStatus = async (req, res) => {
   try {
-    if (req.user.role !== "finance") {
-      return res.status(403).json({ message: "Access denied" });
-    }
 
     const { status } = req.body;
     if (!["pending", "received", "rejected"].includes(status)) {

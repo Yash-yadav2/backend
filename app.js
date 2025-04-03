@@ -5,6 +5,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
+
 // Load environment variables
 dotenv.config();
 
@@ -16,7 +17,20 @@ connectDB();
 
 // Middleware
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+const allowedOrigins = [process.env.FRONTEND];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allow cookies and sessions
+  })
+);
 
 // Session Configuration
 app.use(
@@ -39,6 +53,8 @@ app.use("/api/transactions", require("./routes/transactionRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/finance", require("./routes/financeRoutes"));
 app.use("/api/user", require("./routes/userRoutes"));
+app.use("/api/companyaccount", require("./routes/companyAccountRoutes"));
+
 
 // Default Route
 app.get("/", (req, res) => {

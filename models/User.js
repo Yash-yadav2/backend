@@ -4,8 +4,8 @@ const passportLocalMongoose = require('passport-local-mongoose');
 
 const UserSchema = new mongoose.Schema({
   username:  { type: String, unique: true }, // Will be auto-generated
-  firstName: { type: String, required: true },
-  lastName:  { type: String, required: true },
+  firstName: { type: String },
+  lastName:  { type: String },
   email:       { type: String, required: true, unique: true },
   password: { type: String, required: true }, // Should be stored as plain text if no bcrypt is use
   role:        { type: String, enum: ["user", "admin", "finance"], default: "user" },
@@ -21,6 +21,8 @@ const UserSchema = new mongoose.Schema({
   ipAdress:    { type: String }, // For finance admin to update user IP address
   location:    { type: String }, // For finance admin to update user location
 });
+
+
 UserSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
 
 
